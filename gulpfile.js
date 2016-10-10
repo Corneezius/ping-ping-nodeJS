@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
+var browserSync = require('browser-sync').create();
 var buildProduction = utilities.env.production;
 var jshint = require('gulp-jshint');
 var lib = require('bower-files')({
@@ -71,3 +72,18 @@ gulp.task('bowerCSS', function () {
 });
 
 gulp.task('bower', ['bowerJS', 'bowerCSS']);
+
+gulp.task('serve', function() {
+  browserSync.init({
+    server: {
+      baseDir: "./",
+      index: "index.html"
+    }
+  });
+
+    gulp.watch(['js/*.js'], ['jsBuild']);
+  });
+
+gulp.task('jsBuild', ['jsBrowserify', 'jshint'], function(){
+  browserSync.reload();
+});
